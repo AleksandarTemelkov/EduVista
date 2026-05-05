@@ -1,26 +1,22 @@
+from separator             import separator
+from terminal_silencer     import TerminalSilencer
 from assessments           import Assessments
 from entries_extractor     import EntriesExtractor
 from statistics_analyzer   import StatisticsAnalyzer
 from statistics_visualizer import StatisticsVisualizer
-from terminal_silencer     import TerminalSilencer
 import argparse
 
 
-# Debug Flags
+    # Debug Flags
 debugEntries: bool = False
 debugStats: bool = False
 
-# Separators
-SEP_LENGTH = 128
-sep_major = "=" * SEP_LENGTH
-sep_minor = "–" * SEP_LENGTH
-
-# Terminal Silencer instancing
+    # Terminal Silencer instancing
 silencer = TerminalSilencer()
 
 
 if __name__ == "__main__":
-    print(sep_major)
+    print(separator.major)
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--assessment", required=True, 
@@ -34,17 +30,17 @@ if __name__ == "__main__":
         current_assessment = getattr(Assessments, entered_assessment.upper())
     except AttributeError:
         print(f"[ERROR] Assessment '{entered_assessment}' not found in available assessments.")
-        print(sep_minor)
+        print(separator.minor)
 
         print("Available assessments:")
         for assessment in Assessments:
             print(f"• {assessment.name}")
         
-        print(sep_major)
+        print(separator.major)
         exit(1)
     except Exception as e:
         print(e)
-        print(sep_major)
+        print(separator.major)
         exit(1)
     
     # Get the specific scale and layout
@@ -62,9 +58,9 @@ if __name__ == "__main__":
         analyzer = StatisticsAnalyzer(active_scale, scores)
 
         if debugEntries:
-            print(sep_major)
+            print(separator.major)
             print("ENTRIES:")
-            print(sep_minor)
+            print(separator.minor)
             analyzer.print_scores()
             print()
             analyzer.print_entries_positive()
@@ -72,12 +68,12 @@ if __name__ == "__main__":
             analyzer.print_entries_negative()
             print()
             analyzer.print_entries_absent()
-            print(sep_major)
+            print(separator.major)
 
         if debugStats:
-            print(sep_major)
+            print(separator.major)
             print("STATISTICS:")
-            print(sep_minor)
+            print(separator.minor)
             analyzer.print_score_min()
             analyzer.print_score_max()
             analyzer.print_scores_count()
@@ -92,7 +88,7 @@ if __name__ == "__main__":
             analyzer.print_percentile(25)
             analyzer.print_percentile(50)
             analyzer.print_percentile(75)
-            print(sep_major)
+            print(separator.major)
         
         # Visualization
         visualizer = StatisticsVisualizer(current_assessment, analyzer)
@@ -103,13 +99,13 @@ if __name__ == "__main__":
 
     except Exception as e:
         print(e)
-        print(sep_major)
+        print(separator.major)
         exit(1)
 
     finally:
         silencer.restore() # Restore the original state
 
 
-    print(sep_minor)
+    print(separator.minor)
     print("[INFO] Analysis completed successfully.")
-    print(sep_major)
+    print(separator.major)
