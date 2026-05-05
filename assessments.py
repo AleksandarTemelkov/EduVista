@@ -13,7 +13,7 @@ class AssessmentType(Enum):
 
 @dataclass
 class Assessment:
-    subject: Subject  # Assessment points TO subject
+    subject: Subject
     type: AssessmentType
     date: date
     iteration: int

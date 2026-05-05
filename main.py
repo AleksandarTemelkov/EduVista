@@ -2,19 +2,8 @@ from assessments           import Assessments
 from entries_extractor     import EntriesExtractor
 from statistics_analyzer   import StatisticsAnalyzer
 from statistics_visualizer import StatisticsVisualizer
+from terminal_silencer     import TerminalSilencer
 import argparse
-import termios
-import sys
-
-
-fd = sys.stdin.fileno()
-
-# Concrete names describing the terminal state
-original_tty_state = termios.tcgetattr(fd)
-silent_tty_state   = termios.tcgetattr(fd)
-
-# Modify the local copy to hide control characters (like ^C)
-silent_tty_state[3] &= ~termios.ECHOCTL
 
 
 # Debug Flags
@@ -25,6 +14,9 @@ debugStats: bool = False
 SEP_LENGTH = 128
 sep_major = "=" * SEP_LENGTH
 sep_minor = "–" * SEP_LENGTH
+
+# Terminal Silencer instancing
+silencer = TerminalSilencer()
 
 
 if __name__ == "__main__":
@@ -65,7 +57,7 @@ if __name__ == "__main__":
     keyboardInterrupt = False
 
     try:
-        termios.tcsetattr(fd, termios.TCSADRAIN, silent_tty_state) # Setting new terminal settings
+        silencer.enable_silent_mode()  # This hides ^C
         scores = extractor.extract_pdf(input_file)
         analyzer = StatisticsAnalyzer(active_scale, scores)
 
@@ -115,7 +107,7 @@ if __name__ == "__main__":
         exit(1)
 
     finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, original_tty_state) # Restore the original state
+        silencer.restore() # Restore the original state
 
 
     print(sep_minor)

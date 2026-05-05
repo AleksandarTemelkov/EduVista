@@ -1,11 +1,11 @@
 from assessments          import Assessment
 from statistics_analyzer  import StatisticsAnalyzer
 from scipy.stats          import norm   # pyright: ignore[reportMissingImports]
-from tkinter import messagebox
 import matplotlib.pyplot  as plt        # pyright: ignore[reportMissingModuleSource]
-import seaborn            as sns        # pyright: ignore[reportMissingModuleSource]
 import numpy              as np         # pyright: ignore[reportMissingImports]
 import pathlib
+import seaborn            as sns        # pyright: ignore[reportMissingModuleSource]
+
 
 class StatisticsVisualizer:
     def __init__(self, assessment: Assessment, analyzer: StatisticsAnalyzer) -> None:
